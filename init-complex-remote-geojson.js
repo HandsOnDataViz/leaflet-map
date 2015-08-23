@@ -25,10 +25,46 @@ $(function() {
       onEachFeature: onEachPolygon
     });
 
+    // create earthquake popup info
+    // function onEachMarker( feature, layer) {
+    //     var popupText = "Magnitude: " + feature.properties.mag
+    //         + "<br>Location: " + feature.properties.place
+    //         + "<br><a href='" + feature.properties.url + "'>More info</a>";
+    //     layer.bindPopup(popupText)
+    // }
+
+    // var quakes = L.geoJson("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson", {
+    //   onEachFeature: onEachMarker
+    // });
+
+    // function addDataToMap(data, map) {
+    // var dataLayer = L.geoJson(data, {
+    //     onEachFeature: function(feature, layer) {
+    //         var popupText = "Magnitude: " + feature.properties.mag
+    //             + "<br>Location: " + feature.properties.place
+    //             + "<br><a href='" + feature.properties.url + "'>More info</a>";
+    //         layer.bindPopup(popupText); }
+    //     });
+    // dataLayer.addTo(map);
+    // }
+    //
+    // $.getJSON(("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson", function(data) { addDataToMap(data, map); });)
+
+    // I had to define dataLayer outside of the function below, and it is automatically added to map
+    var dataLayer;
+
+    function addDataToMap(data, map) {
+      dataLayer = L.geoJson(data);
+      dataLayer.addTo(map);
+    }
+
+    $.getJSON("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson", function(data) { addDataToMap(data, map); });
+
+
     // Initiating the Leaflet map
     var map = new L.Map('map', {
       center: [41.76, -72.67],
-      zoom: 11,
+      zoom: 3,
       zoomControl: false, // add later
       layers: [lightAll, towns], // default display
       scrollWheelZoom: false
@@ -44,8 +80,11 @@ $(function() {
     //   "lightNoLabels" : lightNoLabels
     // };
 
+    // FIX - currently cannot display dataLayer in control
     var overlays = {
       "Connecticut Towns": towns
+      // ,
+      // "USGS Earthquakes" : dataLayer
     };
 
     // display layer control -- option to insert "basemaps" if multiple options to display

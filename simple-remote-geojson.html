@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Leaflet template</title>
+  <!-- load Leaflet and jQuery remotely  -->
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+  <!-- load additional files from the local directory -->
+  <link rel="stylesheet" href="style.css" type="text/css">
+
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+  // Initiating the Leaflet map
+  var map = new L.Map('map', {
+    center: [41.76, -72.67],
+    zoom: 6,
+    scrollWheelZoom: false
+  });
+
+  var lightAll = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  }).addTo(map);
+
+  // remotely load and display earthquake geojson markers from USGS
+  function addDataToMap(data, map) {
+    var dataLayer = L.geoJson(data, {
+        onEachFeature: function(feature, layer) {
+            var popupText = "Magnitude: " + feature.properties.mag
+                + "<br>Location: " + feature.properties.place
+                + "<br><a href='" + feature.properties.url + "'>More info</a>";
+            layer.bindPopup(popupText); }
+        });
+    dataLayer.addTo(map);
+  }
+  $.getJSON("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson", function(data) { addDataToMap(data, map); });
+
+  </script>
+</body>
+</html>
