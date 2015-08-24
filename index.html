@@ -2,18 +2,154 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Leaflet 0.7.3 template</title>
+  <title>Leaflet template</title>
   <!-- load Leaflet and jQuery remotely  -->
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <!-- occasionally test Leaflet 1.0 beta -->
+  <!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-1.0.0-b1/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-1.0.0-b1/leaflet.js"></script> -->
   <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
   <!-- load additional files from the local directory -->
   <link rel="stylesheet" href="style.css" type="text/css">
-  <script type="text/javascript" src="init.js"></script>
-  <script type="text/javascript" src="townBorders.js"></script>
+  <!-- to easily call GeoJSON files from local directory (without jQuery functions) or via URL across server domains (eg. MAGIC server to GitHub)
+  use Leaflet-Ajax https://github.com/calvinmetcalf/leaflet-ajax to avoid loading individual js files-->
+  <script type="text/javascript" src="dist/leaflet.ajax.min.js"></script>
 
 </head>
 <body>
   <div id="map"></div>
+  <script>
+
+  var lightAll = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  });
+  var lightNoLabels = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  });
+
+  // tileLayer.WMS - see http://leafletjs.com/reference.html#tilelayer-wms
+  // for UConn MAGIC - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
+  var aerial1934 = L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
+    layers: 'MAGIC:1934 Connecticut Aerial Photography',
+    format: 'image/png',
+    version: '1.1.0',
+    transparent: true,
+    attribution: "1934 MAGIC UConn" // add link later
+  });
+
+  // option #1 for present-day satellite image from Leaflet providers preview
+  // http://leaflet-extras.github.io/leaflet-providers/preview/
+  var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  });
+
+  // option #2 for present-day satellite image from Leaflet providers preview
+  var MapQuestOpen_Aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+	  type: 'sat',
+	  ext: 'jpg',
+	  attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+	  subdomains: '1234'
+  });
+
+  // style all polygon features the same way with function outside of geoJson layer
+  function style(feature) {
+    return {
+        color: 'red',
+        weight: 1,
+        fillOpacity: 0
+    };
+  }
+
+  // easily load geojson from local directory with Leaflet-Ajax
+  // note: may produce "not well formed" errors for local files https://github.com/calvinmetcalf/leaflet-ajax/issues/8
+  // pop-up feature definitions can be customized for each geojson and variables
+  var townBorders = L.geoJson.ajax("src/townBorders.geojson", {
+    style: style,
+    onEachFeature: function( feature, layer){
+      layer.bindPopup(feature.properties.NAME10) // be sure variable matches geoJson
+    }
+  });
+
+  var hartfordCounty = L.geoJson.ajax("src/hartfordCounty.geojson", {
+    style: style,
+    onEachFeature: function( feature, layer){
+      layer.bindPopup(feature.properties.NAME10) // be sure variable matches geoJson
+    }
+  });
+
+  // load remote geoJson: USGS earthquakes
+  // http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+  var earthquakes = L.geoJson.ajax("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson", {
+    onEachFeature: function(feature, layer) {
+     var popupText = "Magnitude: " + feature.properties.mag
+        + "<br>Location: " + feature.properties.place
+        + "<br><a href='" + feature.properties.url + "'>More info</a>";
+     layer.bindPopup(popupText);
+    }
+  });
+
+  // load remote geoJson: ctFastrak-Hartford.gov
+  // feed NOT currently working: problem reported 23 Aug 2015
+  // http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0
+  // var ctFastrak = L.geoJson.ajax("http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0.geojson", {
+  //   onEachFeature: function(feature, layer) {
+  //     var popupText = "Vehicle ID: " + feature.properties.vehicle_id;
+  //       layer.bindPopup(popupText); }
+  // });
+
+  // init Leaflet map
+  var map = new L.Map('map', {
+    center: [41.5, -72.7],
+    zoom: 9,
+    zoomControl: false, // add later to position differently
+    layers: [lightAll, townBorders], // MODIFY default layers
+    scrollWheelZoom: false
+  });
+
+  // customize source link to your GitHub repo
+  map.attributionControl
+  .setPrefix('View <a href="http://github.com/jackdougherty/leaflet">code on GitHub</a>, created with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
+
+  // state capital marker, improve later
+  var star = L.icon({
+    iconUrl: 'src/star-18.png',
+    iconRetinaUrl: 'src/star-18@2x.png',
+    iconSize: [18, 18]
+    // iconAnchor: [22, 94],
+    // popupAnchor: [-3, -76],
+    // shadowUrl: 'my-icon-shadow.png',
+    // shadowRetinaUrl: 'my-icon-shadow@2x.png',
+    // shadowSize: [68, 95],
+    // shadowAnchor: [22, 94]
+  });
+  L.marker([41.764, -72.682], {icon: star}).addTo(map);
+
+  // set up L.control.layers options
+  // use if multiple basemap options to display; otherwise comment-out and pass as null in L.control.layers
+  var basemaps = {
+    "lightAll": lightAll,
+    "lightNoLabels" : lightNoLabels,
+    "MAGIC aerial1934" : aerial1934,
+    "Esri_WorldImagery" : Esri_WorldImagery,
+    "MapQuestOpen_Aerial" : MapQuestOpen_Aerial
+  };
+
+  var overlays = {
+    "townBorders": townBorders,
+    "hartfordCounty": hartfordCounty,
+    "earthquakes": earthquakes
+  };
+
+  // option to insert null to skip display of either basemaps or overlays
+  L.control.layers( basemaps, overlays, {
+    position: "topleft",
+    collapsed: false // keep open on startup
+  }).addTo(map);
+
+  // places zoom in different position than default setting
+  L.control.zoom({position: "topright"}).addTo(map);
+
+  </script>
 </body>
 </html>
