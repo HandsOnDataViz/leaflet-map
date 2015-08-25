@@ -1,8 +1,38 @@
 # leaflet-map
-Leaflet map template that loads local and remote files (GeoJSON, tileLayer, tileLayer.WMS ) directly into L.control.layers to toggle on/off
+Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLayer.WMS) directly into legend toggle (L.control.layers) with simple jQuery call
 
-## demo
- - http://jackdougherty.github.io/leaflet/
+## Demo
+ - with Leaflet-0.7.3 http://jackdougherty.github.io/leaflet-map/
+
+ - with Leaflet-1.0.0-b1 beta http://jackdougherty.github.io/leaflet-map/leaflet-beta.html
+
+ ## Why this template?
+
+ This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The samples feature Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries.
+
+ Learn more about Leaflet from these tutorials:
+ - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
+ - Leaflet Tutorials: http://leafletjs.com/examples.html
+
+ This template addresses my greatest challenge as novice coder: how to upload my own spatial data into Leaflet in the popular GeoJSON format, without getting lost in confusing jQuery functions. Leaflet's own intro tutorial skips over this important step. Other excellent tutorials show how to load GeoJSON data from inside a jQuery function, but in a way that does not easily allow you to place those layers in a toggle legend outside of that function. Finally, I discovered a simple, flexible solution posted by [@iH8 on StackOverflow]( http://stackoverflow.com/questions/28534705/how-to-add-two-geojson-feature-collections-in-to-two-layer-groups):
+ ```
+ // Create the layercontrol and add it to the map
+var controlLayers = L.control.layers().addTo(map);
+
+// Loading a GeoJSON file (using jQuery's $.getJSON)
+$.getJSON('/my-folder/my-file.json', function (data) {
+
+// Use the data to create a GeoJSON layer and add it to the map
+var geojsonLayer = L.geoJson(data).addTo(map);
+
+// Add the geojson layer to the layercontrol
+  controlLayers.addOverlay(geojsonLayer, 'My GeoJSON layer title');
+
+});
+```
+*See also a working example on Plunker: http://plnkr.co/edit/tFVrrq?p=preview *
+
+Using this method, controlLayers is declared as a global variable near the top. When map layers are loaded in subsequent jQuery functions, they can be added directly to the map and/or to the legend toggle control. Overall, this approach seems more straightforward than other tutorials, yet I had not seen it described elsewhere. This template expands on the concept, inserts some sample layers and styling, and includes code comments for novices like me. Feedback and pull requests are welcome.
 
 ## To Do
 - build leaflet-map-dual
@@ -11,8 +41,9 @@ Leaflet map template that loads local and remote files (GeoJSON, tileLayer, tile
 - MAGIC: please check default projection and other settings in tileLayer.WMS
 - MAGIC: please confirm preferred tileLayer.WMS for present-day satellite view
 - see additional TO DO notes in script.js code comments
-- create Omnivore example to display KML, etc.; and add plugin to template
+- create Omnivore example to display KML, etc.; and add plugin to template (or MapBox with token)
 - create MapBox tileLayer example; requires token
+- create MapBox featureLayer example; requires token
 - add this local geoJson feed as supplement to USGS earthquakes; currently broken
 ```
 // load remote geoJson: ctFastrak-Hartford.gov
@@ -24,7 +55,7 @@ Leaflet map template that loads local and remote files (GeoJSON, tileLayer, tile
 //       layer.bindPopup(popupText); }
 // });
 ```
-- Decide whether to add leaflet-ajax example; can rewrite this one to match; add plugin and put this in header:
+- Decide whether to add leaflet-ajax example to load geoJson layers from external sources across server domains (https://github.com/calvinmetcalf/leaflet-ajax), with further explanation (http://lyzidiamond.com/posts/external-geojson-and-leaflet-the-other-way/). Still relevant? If so, perhaps recode this example to match; add plugin and put this in header:
 <script type="text/javascript" src="dist/leaflet.ajax.min.js"></script>
 ```
 // load remote geoJson: USGS earthquakes
@@ -38,9 +69,3 @@ var earthquakes = L.geoJson.ajax("http://earthquake.usgs.gov/earthquakes/feed/v1
   }
 });
 ```
-
-## Notes on loading geoJson layers in Leaflet
-
-- Great overview to loading different GeoJson layers into Leaflet http://maptimeboston.github.io/leaflet-intro/
-- the best strategy I have seen to uploading GeoJson layers directly into a Leaflet L.control.layer, when you wish to toggle on/off (or not display right away) http://stackoverflow.com/questions/28534705/how-to-add-two-geojson-feature-collections-in-to-two-layer-groups
-- To load geoJson layers from external sources across server domains (https://github.com/calvinmetcalf/leaflet-ajax), with further explanation (http://lyzidiamond.com/posts/external-geojson-and-leaflet-the-other-way/)
