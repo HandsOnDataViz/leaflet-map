@@ -8,7 +8,7 @@ Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLay
 
  ## Why this template?
 
- This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The samples feature Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries.
+ This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The templats feature Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
 
  Learn more about Leaflet from these tutorials:
  - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
@@ -30,7 +30,7 @@ var geojsonLayer = L.geoJson(data).addTo(map);
 
 });
 ```
-See also working example by @iH8 on Plunker: http://plnkr.co/edit/tFVrrq?p=preview 
+See also working example by @iH8 on Plunker: http://plnkr.co/edit/tFVrrq?p=preview
 
 Using this method, controlLayers is declared as a global variable near the top. When map layers are loaded in subsequent jQuery functions, they can be added directly to the map and/or to the legend toggle control. Overall, this approach seems more straightforward than other tutorials, yet I had not seen it described elsewhere. This template expands on the concept, inserts some sample layers and styling, and includes code comments for novices like me. Feedback and pull requests are welcome.
 
