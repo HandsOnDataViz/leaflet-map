@@ -8,7 +8,7 @@ Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLay
 
  ## Why this template?
 
- This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The templats feature Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
+ This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
 
  Learn more about Leaflet from these tutorials:
  - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
@@ -35,18 +35,16 @@ See also working example by @iH8 on Plunker: http://plnkr.co/edit/tFVrrq?p=previ
 Using this method, controlLayers is declared as a global variable near the top. When map layers are loaded in subsequent jQuery functions, they can be added directly to the map and/or to the legend toggle control. Overall, this approach seems more straightforward than other tutorials, yet I had not seen it described elsewhere. This template expands on the concept, inserts some sample layers and styling, and includes code comments for novices like me. Feedback and pull requests are welcome.
 
 ## To Do
-- build leaflet-map-dual
-- build leaflet-map-story
-- build leaflet-map-timeslider
 - MAGIC: please check default projection and other settings in tileLayer.WMS
 - MAGIC: please confirm preferred tileLayer.WMS for present-day satellite view
+- create JSON layer from Flickr code
 - see additional TO DO notes in script.js code comments
 - create Omnivore example to display KML, etc.; and add plugin to template (or MapBox with token)
 - create MapBox tileLayer example; requires token
 - create MapBox featureLayer example; requires token
 - add this local geoJson feed as supplement to USGS earthquakes; currently broken
 ```
-// load remote geoJson: ctFastrak-Hartford.gov
+// load remote geoJson: ctFastrak-Hartford.gov (or create JSON layer directly from site)
 // feed NOT currently working: problem reported 23 Aug 2015
 // http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0
 // var ctFastrak = L.geoJson.ajax("http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0.geojson", {

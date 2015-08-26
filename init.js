@@ -62,7 +62,7 @@ var MapQuestOpen_Aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{ty
 });
 controlLayers.addBaseLayer(MapQuestOpen_Aerial, 'MapQuest Open Aerial');
 
-// tileLayer.WMS baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
+// tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
 // UConn MAGIC WMS settings - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
 var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
   layers: 'MAGIC:1934 Connecticut Aerial Photography',
@@ -141,6 +141,43 @@ $.getJSON(geoJsonURL, function (data) {
   });  // insert ".addTo(map)" to display layer by default
   controlLayers.addOverlay(geoJsonLayer, 'USGS Earthquakes (zoom out)');  // insert your 'Title' to add to legend
 });
+
+//TESTING Flickr photo overlay (items display, but button is not working)
+//Use Flickr API explorer to obtain correct endpoint and insert your own API key
+//Photos.search currently works, but error with photosets.getPhotos
+//https://www.flickr.com/services/api/explore/flickr.photos.search
+//https://www.flickr.com/services/api/explore/flickr.photosets.getPhotos
+
+var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&text=bike&extras=geo%2Curl_t%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
+//This returns error
+//var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=25dcc9a8c7410551dcb0af48c778bde5&photoset_id=72157646371103550&extras=geo%2Curl_t%2Curl_m&format=json&nojsoncallback=1";
+var popupHTML = function(photo){
+  var result = "";
+              result = '<strong>'+photo.title+'</strong><br>';
+              result += '<a href="'+photo.url_m+'" target="_blank">';
+              result += '<img src="'+photo.url_t+'"></a>';      //can change to url_m if desired, but frame needs work
+              result += '<p><small>click to enlarge</small></p>';
+              return result;
+}
+// TEST #1 trying to modify this $.ajax flickr function that originally worked in bikemapcode
+$.ajax({
+  url: flickrURL,
+  dataType: 'json',
+  success: function(data){
+    for (var i = 0; i < data.photos.photo.length; i++){
+      var photo_obj = data.photos.photo[i];
+      var photo_icon = L.icon(
+        {iconUrl: photo_obj.url_t,
+        iconSize: [photo_obj.width_t * 0.5, photo_obj.height_t * 0.5]}  //reduces thumbnails 50%
+      );
+
+      var flickrPhotos = new L.marker([photo_obj.latitude, photo_obj.longitude], {icon: photo_icon})
+      .bindPopup(popupHTML(photo_obj)).addTo(map);
+    }
+  controlLayers.addOverlay(flickrPhotos, 'Flickr photos (broken button)'); //THIS IS the problem line
+  }
+});
+
 
 // display state capital star, on top of other layers since it is loaded last
 // *TO DO* improve styling
