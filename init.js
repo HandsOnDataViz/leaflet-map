@@ -73,58 +73,38 @@ var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoser
 });
 controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
+/* POINT OVERLAYS */
 
-/* OVERLAYS */
-// follow different models to load GeoJson layers, erase, or create your own
+// load one point from code coordinates, icon from local directory, no interactive legend button
+// places a star on state capital of Hartford, CT, (visible at all times? **TEST**)
+var starIcon = L.icon({
+  iconUrl: 'src/star-18.png',
+  iconRetinaUrl: 'src/star-18@2x.png',
+  iconSize: [18, 18]
+});
+L.marker([41.764, -72.682], {icon: starIcon}).addTo(map);
 
-// load geojson polygons from local directory, using jQuery function (symbolized by $)
+// REORGANIZE TEXT
+// load point geojson data from local directory, using jQuery function (symbolized by $)
 // modify style (for appearance) and onEachFeature (for popup windows or hover info)
 // insert '.addTo(map)' to display layer by default
 // insert controlLayers.addOverlay(geoJsonLayer, 'InsertYourTitle') to add to legend
-$.getJSON("src/simplifiedTownBorders.geojson", function (data) {   // insert pathname to your local directory file
-  var geoJsonLayer = L.geoJson(data, {
-    style: function (feature) {
-      return {
-        'color': 'red',
-        'weight': 2,
-        'fillColor': '#fff',
-        'fillOpacity': 0.2
-      }
-    },
-    onEachFeature: function( feature, layer) {
-      layer.bindPopup(feature.properties.Town) // change 'Town' to match your geojson property labels
-    }
-  }).addTo(map);  // insert ".addTo(map)" to display layer by default
-  controlLayers.addOverlay(geoJsonLayer, 'Connecticut towns');  // insert your 'Title' to add to legend
-});
 
-// load geojson polygon from local directory, with more complex styling and popup windows
-// *TO DO* rebuild file for pop density, and add legend
-$.getJSON("src/simplifiedTownBorders.geojson", function (data) {   // insert pathname to your local directory file
+// load geojson points and clickable icons from local directory
+$.getJSON("src/points.geojson", function (data){
+  var iconStyle = L.icon({
+    iconUrl: "src/hospital-18.png",
+    iconRetinaUrl: 'src/hospital-18@2x.png',
+    iconSize: [18, 18]
+  });
   var geoJsonLayer = L.geoJson(data, {
-    style: function (feature) {
-      var fillColor,
-        population = feature.properties.Pop2010;
-      if (population > 100000) fillColor = "#006837";
-      else if (population > 50000) fillColor ="#31a354";
-      else if (population > 15000) fillColor ="#78c679";
-      else if (population > 5000) fillColor ="#c2e699";
-      else if (population > 0) fillColor ="#ffffcc";
-      else fillColor = "#f7f7f7"; // no data
-      return {
-        'color': 'red',
-        'weight': 2,
-        'fillColor': fillColor, // sorts by method above
-        'fillOpacity': 0.8
-      }
-    },
-    onEachFeature: function( feature, layer) {
-      var popupText = "<b>" + feature.properties.Town + "</b>"   // replace labels with those from your own geojson
-         + "<br>Population 2010: " + "<br>" + feature.properties.Pop2010;
-      layer.bindPopup(popupText);
+    pointToLayer: function( feature, latlng) {
+      var marker = L.marker(latlng,{icon: iconStyle});
+      marker.bindPopup(feature.properties.Location);
+      return marker;
     }
-  });  // insert ".addTo(map)" to display layer by default
-  controlLayers.addOverlay(geoJsonLayer, 'Connecticut Population 2010');  // insert your 'Title' to add to legend
+  }); // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Hospitals');
 });
 
 // load geoJson markers from remote API feed: USGS earthquakes
@@ -148,16 +128,16 @@ $.getJSON(geoJsonURL, function (data) {
 //https://www.flickr.com/services/api/explore/flickr.photos.search
 //https://www.flickr.com/services/api/explore/flickr.photosets.getPhotos
 
-var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&text=bike&extras=geo%2Curl_t%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
+var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
 //This returns error
 //var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=25dcc9a8c7410551dcb0af48c778bde5&photoset_id=72157646371103550&extras=geo%2Curl_t%2Curl_m&format=json&nojsoncallback=1";
 var popupHTML = function(photo){
   var result = "";
-              result = '<strong>'+photo.title+'</strong><br>';
-              result += '<a href="'+photo.url_m+'" target="_blank">';
-              result += '<img src="'+photo.url_t+'"></a>';      //can change to url_m if desired, but frame needs work
-              result += '<p><small>click to enlarge</small></p>';
-              return result;
+      result = '<strong>'+photo.title+'</strong><br>';
+      result += '<a href="'+photo.url_m+'" target="_blank">';
+      result += '<img src="'+photo.url_t+'"></a>';      //can change to url_m if desired, but frame needs work
+      result += '<p><small>click to enlarge</small></p>';
+      return result;
 }
 // TEST #1 trying to modify this $.ajax flickr function that originally worked in bikemapcode
 $.ajax({
@@ -172,24 +152,100 @@ $.ajax({
       );
 
       var flickrPhotos = new L.marker([photo_obj.latitude, photo_obj.longitude], {icon: photo_icon})
-      .bindPopup(popupHTML(photo_obj)).addTo(map);
+      // .bindPopup(popupHTML(photo_obj)).addTo(map);
+      .bindPopup(popupHTML(photo_obj));
     }
   controlLayers.addOverlay(flickrPhotos, 'Flickr photos (broken button)'); //THIS IS the problem line
   }
 });
 
+// ERASE DUPLICATE later
+// $.getJSON("src/points.geojson", function (data){
+//   var iconStyle = L.icon({
+//     iconUrl: "src/hospital-18.png",
+//     iconRetinaUrl: 'src/hospital-18@2x.png',
+//     iconSize: [18, 18]
+//   });
+//   var geoJsonLayer = L.geoJson(data, {
+//     pointToLayer: function( feature, latlng) {
+//       var marker = L.marker(latlng,{icon: iconStyle});
+//       marker.bindPopup(feature.properties.Location);
+//       return marker;
+//     }
+//   }); // insert ".addTo(map)" to display layer by default
+//   controlLayers.addOverlay(geoJsonLayer, 'Hospitals');
+// });
 
-// display state capital star, on top of other layers since it is loaded last
-// *TO DO* improve styling
-var star = L.icon({
-  iconUrl: 'src/star-18.png',
-  iconRetinaUrl: 'src/star-18@2x.png',
-  iconSize: [18, 18]
-  // iconAnchor: [22, 94],
-  // popupAnchor: [-3, -76],
-  // shadowUrl: 'my-icon-shadow.png',
-  // shadowRetinaUrl: 'my-icon-shadow@2x.png',
-  // shadowSize: [68, 95],
-  // shadowAnchor: [22, 94]
+// TEST #2 trying to modify this $.ajax flickr function that originally worked in bikemapcode
+// modifying with pointToLayer approach from http://maptimeboston.github.io/leaflet-intro/
+// $.ajax({
+//   url: flickrURL,
+//   dataType: 'json',
+//   success: function(data){
+//   for (var i = 0; i < data.photos.photo.length; i++){
+//     var photo_obj = data.photos.photo[i];
+//     var iconStyle = L.icon({
+//       iconUrl: photo_obj.url_t,
+//       iconSize: [photo_obj.width_t * 0.5, photo_obj.height_t * 0.5]  //reduces thumbnails 50%
+//     });
+//     var flickrLayer = L.geoJson(data, {
+//       pointToLayer: function(feature,latlng) {
+//         var marker = L.marker([photo_obj.latitude, photo_obj.longitude], {icon: iconStyle});
+//         marker.bindPopup(popupHTML(photo_obj));
+//         return marker;
+//       }
+//     }); // insert ".addTo(map)" to display layer by default
+//     controlLayers.addOverlay(geoJsonLayer, 'Flickr testing');
+//     }
+//   }
+// });
+
+/* POLYGON OVERLAYS */
+
+// load polygon data with clickable features from local directory
+$.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your local directory file
+  var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      return {
+        'color': 'red',
+        'weight': 2,
+        'fillColor': '#fff',
+        'fillOpacity': 0.2
+      }
+    },
+    onEachFeature: function( feature, layer) {
+      layer.bindPopup(feature.properties.Town) // change 'Town' to match your geojson property labels
+    }
+  }).addTo(map);  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Polygons (CT towns)');  // insert your 'Title' to add to legend
 });
-L.marker([41.764, -72.682], {icon: star}).addTo(map);
+
+// load polygon geojson, with more complex styling, from local directory
+// *TO DO* rebuild file for pop density
+// *TO DO* change from click to hover, and add legend to display colors and hover data
+$.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your local directory file
+  var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      var fillColor,
+        population = feature.properties.Pop2010;
+      if (population > 100000) fillColor = "#006837";
+      else if (population > 50000) fillColor ="#31a354";
+      else if (population > 15000) fillColor ="#78c679";
+      else if (population > 5000) fillColor ="#c2e699";
+      else if (population > 0) fillColor ="#ffffcc";
+      else fillColor = "#f7f7f7"; // no data
+      return {
+        'color': 'red',
+        'weight': 2,
+        'fillColor': fillColor, // sorts by method above
+        'fillOpacity': 0.8
+      }
+    },
+    onEachFeature: function( feature, layer) {
+      var popupText = "<b>" + feature.properties.Town + "</b>"   // replace labels with those from your own geojson
+         + "<br>Population 2010: " + "<br>" + feature.properties.Pop2010;
+      layer.bindPopup(popupText);
+    }
+  });  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Polygons filled (CT Pop 2010)');  // insert your 'Title' to add to legend
+});
