@@ -37,7 +37,7 @@ Using this method, controlLayers is declared as a global variable near the top. 
 ## To Do
 - MAGIC: please check default projection and other settings in tileLayer.WMS
 - MAGIC: please confirm preferred tileLayer.WMS for present-day satellite view
-- create JSON layer from Flickr code
+- FIX layercontrol button for Flickr JSON layer; remove unnecessary CSS styling that Flickr layer does not require
 - see additional TO DO notes in script.js code comments
 - create Omnivore example to display KML, etc.; and add plugin to template (or MapBox with token)
 - create MapBox tileLayer example; requires token
