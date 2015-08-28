@@ -4,11 +4,11 @@ Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLay
 ## Demo
  - with Leaflet-0.7.3 http://jackdougherty.github.io/leaflet-map/
 
- - with Leaflet-1.0.0-b1 beta http://jackdougherty.github.io/leaflet-map/leaflet-beta.html
+ - with Leaflet-1.0.0-b1 beta http://jackdougherty.github.io/leaflet-map/index2-new-leaflet-beta.html
 
  ## Why this template?
 
- This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The templats feature Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
+ This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
 
  Learn more about Leaflet from these tutorials:
  - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
@@ -35,18 +35,25 @@ See also working example by @iH8 on Plunker: http://plnkr.co/edit/tFVrrq?p=previ
 Using this method, controlLayers is declared as a global variable near the top. When map layers are loaded in subsequent jQuery functions, they can be added directly to the map and/or to the legend toggle control. Overall, this approach seems more straightforward than other tutorials, yet I had not seen it described elsewhere. This template expands on the concept, inserts some sample layers and styling, and includes code comments for novices like me. Feedback and pull requests are welcome.
 
 ## To Do
-- build leaflet-map-dual
-- build leaflet-map-story
-- build leaflet-map-timeslider
 - MAGIC: please check default projection and other settings in tileLayer.WMS
 - MAGIC: please confirm preferred tileLayer.WMS for present-day satellite view
-- see additional TO DO notes in script.js code comments
+- FIX fluctuating order of overlay layers - related to when they load?
+- TEST if placing overlay code closer to the end of init.js affects display order. For example, will starIcon always be on top if placed near the end? Or loaded after remote layers are loaded?
+- download all code dependencies (so far, Leaflet and jQuery) into src for future-proofing
+- improve polygon fillColor example
+- rebuild file to display Pop Density, not just raw Pop2010
+- change interaction from click to hover, and add legend to display colors and hover data (see US States leaflet tutorial example)
 - create Omnivore example to display KML, etc.; and add plugin to template (or MapBox with token)
 - create MapBox tileLayer example; requires token
 - create MapBox featureLayer example; requires token
-- add this local geoJson feed as supplement to USGS earthquakes; currently broken
+- rewrite first flickr blue marker example to search for first 100 photos near center of map
+- rewrite Flickr popupHTML link to view original source photo directly on Flickr
+- possibly include popupHTML function directly at bottom of relevant code section for more straightforward reading by code novices?
+- test alternative flickr api call: https://www.flickr.com/services/api/explore/flickr.photosets.getPhotos
+- This version has previously returned error: var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=25dcc9a8c7410551dcb0af48c778bde5&photoset_id=72157646371103550&extras=geo%2Curl_t%2Curl_m&format=json&nojsoncallback=1";
+- try adding local CTfastrak geoJson feed (which may be broken) or create JSON layer directly from the source as supplement to USGS earthquakes
 ```
-// load remote geoJson: ctFastrak-Hartford.gov
+// load remote geoJson: ctFastrak-Hartford.gov (or create JSON layer directly from site)
 // feed NOT currently working: problem reported 23 Aug 2015
 // http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0
 // var ctFastrak = L.geoJson.ajax("http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0.geojson", {
@@ -69,3 +76,8 @@ var earthquakes = L.geoJson.ajax("http://earthquake.usgs.gov/earthquakes/feed/v1
   }
 });
 ```
+
+## Credits
+- Thanks to everyone who writes Leaflet tutorials for code novices like me
+- Thanks @erose for teaching me Flickr JSON API and photo thumbnail icon code
+- Thanks @iH8 for creative solutions to L.control.layers on StackOverflow: http://stackoverflow.com/questions/28534705/how-to-add-two-geojson-feature-collections-in-to-two-layer-groups and http://stackoverflow.com/questions/32262561/what-is-the-correct-method-to-toggle-markers-in-leaflet-map-control-layer
