@@ -74,9 +74,11 @@ var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoser
 controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
 /* POINT OVERLAYS */
+// ways to load point map data from different sources: coordinates in the code, GeoJSON in local directory, remote GeoJSON and JSON
 
-// load one point from code coordinates, icon from local directory, no interactive legend button
-// places a star on state capital of Hartford, CT, (visible at all times? **TEST**)
+// load one point from coordinates in code, icon from local directory, no interactive legend button
+// places a star on state capital of Hartford, CT
+// * TO DO: test whether placement of this code affects its display order, on top of other icons?
 var starIcon = L.icon({
   iconUrl: 'src/star-18.png',
   iconRetinaUrl: 'src/star-18@2x.png',
@@ -84,13 +86,13 @@ var starIcon = L.icon({
 });
 L.marker([41.764, -72.682], {icon: starIcon}).addTo(map);
 
-// REORGANIZE TEXT
 // load point geojson data from local directory, using jQuery function (symbolized by $)
-// modify style (for appearance) and onEachFeature (for popup windows or hover info)
-// insert '.addTo(map)' to display layer by default
+// modify icon source and styling
+// modify pointToLayer marker bindPopup function to display GeoJSON data in info window
+// option to insert '.addTo(map)' to display layer by default
 // insert controlLayers.addOverlay(geoJsonLayer, 'InsertYourTitle') to add to legend
 
-// load geojson points and clickable icons from local directory
+// load GeoJSON point data and clickable icons from local directory, using jQuery function (symbolized by $)
 $.getJSON("src/points.geojson", function (data){
   var iconStyle = L.icon({
     iconUrl: "src/hospital-18.png",
@@ -100,7 +102,7 @@ $.getJSON("src/points.geojson", function (data){
   var geoJsonLayer = L.geoJson(data, {
     pointToLayer: function( feature, latlng) {
       var marker = L.marker(latlng,{icon: iconStyle});
-      marker.bindPopup(feature.properties.Location);
+      marker.bindPopup(feature.properties.Location); // replace 'Location' with properties data label from your GeoJSON file
       return marker;
     }
   }); // insert ".addTo(map)" to display layer by default
@@ -109,6 +111,7 @@ $.getJSON("src/points.geojson", function (data){
 
 // load geoJson markers from remote API feed: USGS earthquakes
 // http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+// use onEachFeature function to more info window data from geoJson source
 var geoJsonURL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 $.getJSON(geoJsonURL, function (data) {
   var geoJsonLayer = L.geoJson(data, {
@@ -122,18 +125,20 @@ $.getJSON(geoJsonURL, function (data) {
   controlLayers.addOverlay(geoJsonLayer, 'USGS Earthquakes (zoom out)');  // insert your 'Title' to add to legend
 });
 
-//TESTING Flickr photo overlay (items display, but button is not working)
-//Use Flickr API explorer to obtain correct endpoint and insert your own API key
-//Photos.search currently works, but error with photosets.getPhotos
-//https://www.flickr.com/services/api/explore/flickr.photos.search
-//https://www.flickr.com/services/api/explore/flickr.photosets.getPhotos
+// Flickr photo overlay from remote JSON API feed, such as all Flickr public photos OR only from your account
+// Obtain and insert your own flickr API key
+// https://www.flickr.com/services/apps/create/
+// Use Flickr API explorer to obtain correct endpoint
+// https://www.flickr.com/services/api/explore/?method=flickr.photos.search
+// Example shows photos.search of georeferenced images using keyword tags
+// https://www.flickr.com/services/api/explore/flickr.photos.search
 
-// added url_s
+// Define flickrURL endpoint with API explorer: insert your key, and tags= or text= to filter results
 var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_s%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
-//This returns error
-//var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=25dcc9a8c7410551dcb0af48c778bde5&photoset_id=72157646371103550&extras=geo%2Curl_t%2Curl_m&format=json&nojsoncallback=1";
 
-// this is improved output
+// Define the flickr popup display
+// ** TO DO: Rewrite link to view original source photo directly on Flickr
+// ** POSSIBLY include this code directly in the functions below for easier sequencing by novices
 var popupHTML = function(photo){
   var result = "";
       result = '<strong>'+photo.title+'</strong><br>';
@@ -142,68 +147,46 @@ var popupHTML = function(photo){
       result += '<small>click image to enlarge in new tab</small>';
       return result;
 }
-// TEST #1 trying to modify this $.ajax flickr function that originally worked in bikemapcode
-$.ajax({
-  url: flickrURL,
-  dataType: 'json',
-  success: function(data){
-    for (var i = 0; i < data.photos.photo.length; i++){
-      var photo_obj = data.photos.photo[i];
-      var photo_icon = L.icon(
-        {iconUrl: photo_obj.url_t,
-        iconSize: [photo_obj.width_t * 0.5, photo_obj.height_t * 0.5]}  //reduces thumbnails 50%
-      );
-
-      var flickrPhotos = new L.marker([photo_obj.latitude, photo_obj.longitude], {icon: photo_icon})
-      // .bindPopup(popupHTML(photo_obj)).addTo(map);
-      .bindPopup(popupHTML(photo_obj));
-    }
-  controlLayers.addOverlay(flickrPhotos, 'Flickr photos (broken button)'); //THIS IS the problem line
+// Load photos from flickr JSON feed (insert your flickrURL above), display with clickable blue markers
+$.getJSON(flickrURL, function (data) {
+  // Create new layerGroup for the markers, with option to append ".addTo(map);" to display by default
+  var layerGroup = new L.LayerGroup();
+  // Add layerGroup to your layer control and insert your label to appear in legend
+  controlLayers.addOverlay(layerGroup, 'Flickr photo blue markers'); // Insert your own legend label
+  // Start a loop to insert flickr photo data into photoContent
+  for (var i = 0; i < data.photos.photo.length; i++) {
+    var photoContent = data.photos.photo[i];
+    var marker = new L.marker([photoContent.latitude, photoContent.longitude]);
+    marker.bindPopup(popupHTML(photoContent));
+    // Add the marker to the layerGroup
+    marker.addTo(layerGroup);
   }
 });
 
-// ERASE DUPLICATE later
-// $.getJSON("src/points.geojson", function (data){
-//   var iconStyle = L.icon({
-//     iconUrl: "src/hospital-18.png",
-//     iconRetinaUrl: 'src/hospital-18@2x.png',
-//     iconSize: [18, 18]
-//   });
-//   var geoJsonLayer = L.geoJson(data, {
-//     pointToLayer: function( feature, latlng) {
-//       var marker = L.marker(latlng,{icon: iconStyle});
-//       marker.bindPopup(feature.properties.Location);
-//       return marker;
-//     }
-//   }); // insert ".addTo(map)" to display layer by default
-//   controlLayers.addOverlay(geoJsonLayer, 'Hospitals');
-// });
+// Load photos from flickr JSON (insert your flickrURL above), display with clickable photo thumbnails
+$.getJSON(flickrURL, function (data) {
+  // Create new layerGroup for the markers, with option to append ".addTo(map);" to display by default
+  var layerGroup = new L.LayerGroup().addTo(map);
+  // Add layerGroup to your layer control and insert your label to appear in legend
+  controlLayers.addOverlay(layerGroup, 'Flickr photo thumbnail icons');
+  // Start a loop to insert flickr photo data into photoContent
+  for (var i = 0; i < data.photos.photo.length; i++) {
+    var photoContent = data.photos.photo[i];
+    var photoIcon = L.icon(
+      {iconUrl: photoContent.url_t,
+      iconSize: [photoContent.width_t * 0.5, photoContent.height_t * 0.5]}  //reduces thumbnails 50%
+    );
+    var marker = new L.marker([photoContent.latitude, photoContent.longitude], {icon: photoIcon});
+    marker.bindPopup(popupHTML(photoContent));
+    // Add the marker to the layerGroup
+    marker.addTo(layerGroup);
+  }
+});
 
-// TEST #3 trying to modify this $.ajax flickr function that originally worked in bikemapcode
-// modifying with pointToLayer approach from http://maptimeboston.github.io/leaflet-intro/
-// $.ajax({
-//   url: flickrURL,
-//   dataType: 'json',
-//   success: function(data){
-//   for (var i = 0; i < data.photos.photo.length; i++){
-//     var photo_obj = data.photos.photo[i];
-//     var iconStyle = L.icon({
-//       iconUrl: photo_obj.url_t,
-//       iconSize: [photo_obj.width_t * 0.5, photo_obj.height_t * 0.5]  //reduces thumbnails 50%
-//     });
-//     var flickrLayer = L.geoJson(data, {
-//       pointToLayer: function(feature,latlng) {
-//         var marker = L.marker([photo_obj.latitude, photo_obj.longitude], {icon: iconStyle});
-//         marker.bindPopup(popupHTML(photo_obj));
-//         return marker;
-//       }
-//     }); // insert ".addTo(map)" to display layer by default
-//     controlLayers.addOverlay(geoJsonLayer, 'Flickr testing');
-//     }
-//   }
-// });
 
 /* POLYGON OVERLAYS */
+// Ways to load geoJSON polygon layers from local directory or remote server
+// Different options for styling and interactivity
 
 // load polygon data with clickable features from local directory
 $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your local directory file
@@ -223,7 +206,7 @@ $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your
   controlLayers.addOverlay(geoJsonLayer, 'Polygons (CT towns)');  // insert your 'Title' to add to legend
 });
 
-// load polygon geojson, with more complex styling, from local directory
+// load polygon geojson, using data to define fillColor, from local directory
 // *TO DO* rebuild file for pop density
 // *TO DO* change from click to hover, and add legend to display colors and hover data
 $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your local directory file
