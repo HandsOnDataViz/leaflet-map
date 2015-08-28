@@ -128,15 +128,18 @@ $.getJSON(geoJsonURL, function (data) {
 //https://www.flickr.com/services/api/explore/flickr.photos.search
 //https://www.flickr.com/services/api/explore/flickr.photosets.getPhotos
 
-var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
+// added url_s
+var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_s%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
 //This returns error
 //var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=25dcc9a8c7410551dcb0af48c778bde5&photoset_id=72157646371103550&extras=geo%2Curl_t%2Curl_m&format=json&nojsoncallback=1";
+
+// this is improved output
 var popupHTML = function(photo){
   var result = "";
       result = '<strong>'+photo.title+'</strong><br>';
       result += '<a href="'+photo.url_m+'" target="_blank">';
-      result += '<img src="'+photo.url_t+'"></a>';      //can change to url_m if desired, but frame needs work
-      result += '<p><small>click to enlarge</small></p>';
+      result += '<img src="'+photo.url_s+'"></a>';      //was url_t; want url_s; can change to url_m if desired, but frame needs work
+      result += '<small>click image to enlarge in new tab</small>';
       return result;
 }
 // TEST #1 trying to modify this $.ajax flickr function that originally worked in bikemapcode
@@ -176,7 +179,7 @@ $.ajax({
 //   controlLayers.addOverlay(geoJsonLayer, 'Hospitals');
 // });
 
-// TEST #2 trying to modify this $.ajax flickr function that originally worked in bikemapcode
+// TEST #3 trying to modify this $.ajax flickr function that originally worked in bikemapcode
 // modifying with pointToLayer approach from http://maptimeboston.github.io/leaflet-intro/
 // $.ajax({
 //   url: flickrURL,
