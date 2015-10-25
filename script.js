@@ -22,6 +22,13 @@ var controlLayers = L.control.layers( null, null, {
 // optional: reposition zoom control other than default topleft
 L.control.zoom({position: "topright"}).addTo(map);
 
+// REMOVE optional Coordinate Control here (also in index.html) after map construction
+var c = new L.Control.Coordinates();
+c.addTo(map);
+
+map.on('click', function(e) {
+    c.setCoordinates(e);
+});
 
 /* BASELAYERS */
 // use common baselayers below, delete, or add more with plain JavaScript from http://leaflet-extras.github.io/leaflet-providers/preview/
