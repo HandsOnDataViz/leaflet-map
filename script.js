@@ -80,6 +80,17 @@ var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoser
 });
 controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
+// tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
+// UConn MAGIC WMS settings - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
+var hartfordCounty1855 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
+  layers: 'MAGIC:HartfordCounty_Woodford_1855',
+  format: 'image/png',
+  version: '1.1.0',
+  transparent: true,
+  attribution: '1855 <a href="http://magic.library.uconn.edu">MAGIC UConn</a>'
+});
+controlLayers.addBaseLayer(hartfordCounty1855, 'Hartford County 1855');
+
 /* POINT OVERLAYS */
 // ways to load point map data from different sources: coordinates in the code, GeoJSON in local directory, remote GeoJSON and JSON
 
