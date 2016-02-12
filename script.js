@@ -164,6 +164,24 @@ $.getJSON(geoJsonURL, function (data) {
   controlLayers.addOverlay(geoJsonLayer, 'USGS Earthquakes (zoom out)');  // insert your 'Title' to add to legend
 });
 
+// testing from City of Hartford ArcGIS online geojson feed
+// use onEachFeature function to more info window data from geoJson source
+var geoJsonURL = "http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0.geojson";
+$.getJSON(geoJsonURL, function (data) {
+  var geoJsonLayer = L.geoJson(data, {
+    onEachFeature: function( feature, layer) {
+      var popupText = "Label: " + feature.properties.label;
+      layer.bindPopup(popupText);
+    }
+  });  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'CT Transit (City of Hartford)');  // insert your 'Title' to add to legend
+});
+
+
+
+
+
+
 // Flickr photo overlay from remote JSON API feed, such as all Flickr public photos OR only from your account
 // Obtain and insert your own flickr API key
 // https://www.flickr.com/services/apps/create/
