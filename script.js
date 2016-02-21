@@ -19,13 +19,15 @@ var controlLayers = L.control.layers( null, null, {
   collapsed: false // false = open by default
 }).addTo(map);
 
-// optional: reposition zoom control other than default topleft
+// REMOVE AFTER MAP CONSTRUCTION: optional Zoom Label (also in index.html)
+L.control.zoomLabel().addTo(map);
+
+// Reposition zoom control other than default topleft
 L.control.zoom({position: "topright"}).addTo(map);
 
-// REMOVE optional Coordinate Control here (also in index.html) after map construction
+// REMOVE AFTER MAP CONSTRUCTION: optional Coordinate Control (also in index.html)
 var c = new L.Control.Coordinates();
 c.addTo(map);
-
 map.on('click', function(e) {
     c.setCoordinates(e);
 });
@@ -163,24 +165,6 @@ $.getJSON(geoJsonURL, function (data) {
   });  // insert ".addTo(map)" to display layer by default
   controlLayers.addOverlay(geoJsonLayer, 'USGS Earthquakes (zoom out)');  // insert your 'Title' to add to legend
 });
-
-// testing from City of Hartford ArcGIS online geojson feed
-// use onEachFeature function to more info window data from geoJson source
-var geoJsonURL = "http://gisdata.hartford.gov/datasets/453fb4c1dff74efdbdb46fadfd257e28_0.geojson";
-$.getJSON(geoJsonURL, function (data) {
-  var geoJsonLayer = L.geoJson(data, {
-    onEachFeature: function( feature, layer) {
-      var popupText = "Label: " + feature.properties.label;
-      layer.bindPopup(popupText);
-    }
-  });  // insert ".addTo(map)" to display layer by default
-  controlLayers.addOverlay(geoJsonLayer, 'CT Transit (City of Hartford)');  // insert your 'Title' to add to legend
-});
-
-
-
-
-
 
 // Flickr photo overlay from remote JSON API feed, such as all Flickr public photos OR only from your account
 // Obtain and insert your own flickr API key
