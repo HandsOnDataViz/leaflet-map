@@ -225,9 +225,25 @@ $.getJSON(flickrURL, function (data) {
 });
 
 
-/* POLYGON OVERLAYS */
+/* POLYGON and POLYLINE OVERLAYS */
 // Ways to load geoJSON polygon layers from local directory or remote server
 // Different options for styling and interactivity
+
+// load GeoJSON polyline data
+$.getJSON("src/bus-routes.geojson", function (data){
+  var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      return {
+        'color': 'red',
+        'weight': 2,
+      }
+    },
+    onEachFeature: function( feature, layer) {
+      layer.bindPopup(feature.properties.LineName) // change to match your geojson property labels
+    }
+  });  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Bus Routes');  // insert your 'Title' to add to legend
+});
 
 // load polygon data with clickable features from local directory
 $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your local directory file
