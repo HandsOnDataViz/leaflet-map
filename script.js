@@ -8,6 +8,24 @@ var map = L.map('map', {
   zoomControl: false // add later to reposition
 });
 
+// set Esri geocoding provider and place control on map
+// http://esri.github.io/esri-leaflet/api-reference/controls/geosearch.html
+var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
+var searchControl = L.esri.Geocoding.geosearch({
+  position: 'topleft', // default
+  providers: [arcgisOnline],
+  expanded: true  // default = false
+}).addTo(map);
+// create an empty layer group to store the results and add it to the map
+var results = L.layerGroup().addTo(map);
+// listen for the results event and add every result to the map
+searchControl.on("results", function(data) {
+  results.clearLayers();
+  for (var i = data.results.length - 1; i >= 0; i--) {
+    results.addLayer(L.marker(data.results[i].latlng));
+  }
+});
+
 // optional : customize link to view source code; add your own GitHub repository
 map.attributionControl
 .setPrefix('View <a href="http://github.com/jackdougherty/leaflet-map">code on GitHub</a>, created with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
