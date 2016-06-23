@@ -3,8 +3,8 @@
 
 // set up the map center and zoom level
 var map = L.map('map', {
-  center: [41.5, -72.7], // [41.5, -72.7] for Connecticut; [41.76, -72.67] for Hartford county or city
-  zoom: 9, // zoom 9 for Connecticut; 10 for Hartford county, 12 for Hartford city
+  center: [41.76, -72.67], // [41.5, -72.7] for Connecticut; [41.76, -72.67] for Hartford county or city
+  zoom: 13, // zoom 9 for Connecticut; 10 for Hartford county, 12 for Hartford city
   zoomControl: false // add later to reposition
 });
 
@@ -38,7 +38,7 @@ map.on('click', function(e) {
 // controlLayers.addBaseLayer (variableName, 'label'); -- adds baselayer and label to legend; omit if only one baselayer with no toggle desired
 var lightAll = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-}).addTo(map); //this displays layer by default
+});
 controlLayers.addBaseLayer(lightAll, 'CartoDB LightAll');
 
 var lightNoLabels = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
@@ -75,11 +75,8 @@ controlLayers.addBaseLayer(MapQuestOpen_Aerial, 'MapQuest Open Aerial');
 // UConn MAGIC WMS settings - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
 var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
   layers: 'MAGIC:1934 Connecticut Aerial Photography',
-  format: 'image/png',
-  version: '1.1.0',
-  transparent: true,
   attribution: '1934 <a href="http://magic.library.uconn.edu">MAGIC UConn</a> and <a href="http://cslib.org">CSL</a>'
-});
+}).addTo(map); // adds layer by default
 controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
 // tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
