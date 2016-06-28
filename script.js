@@ -147,23 +147,6 @@ $.getJSON("src/points.geojson", function (data){
   controlLayers.addOverlay(geoJsonLayer, 'Hospitals');
 });
 
-
-// load geoJson markers from remote API feed: USGS earthquakes
-// http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
-// use onEachFeature function to more info window data from geoJson source
-var geoJsonURL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
-$.getJSON(geoJsonURL, function (data) {
-  var geoJsonLayer = L.geoJson(data, {
-    onEachFeature: function( feature, layer) {
-      var popupText = "Magnitude: " + feature.properties.mag
-         + "<br>Location: " + feature.properties.place
-         + "<br><a href='" + feature.properties.url + "'>More info</a>";
-      layer.bindPopup(popupText);
-    }
-  });  // insert ".addTo(map)" to display layer by default
-  controlLayers.addOverlay(geoJsonLayer, 'USGS Earthquakes (zoom out)');  // insert your 'Title' to add to legend
-});
-
 // Flickr photo overlay from remote JSON API feed, such as all Flickr public photos OR only from your account
 // Obtain and insert your own flickr API key
 // https://www.flickr.com/services/apps/create/
