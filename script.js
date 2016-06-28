@@ -42,29 +42,29 @@ var lightAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.n
 });
 controlLayers.addBaseLayer(lightAll, 'CartoDB LightAll');
 
-var lightNoLabels = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+var lightNoLabels = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 });
 controlLayers.addBaseLayer(lightNoLabels, 'CartoDB Light no labels');
 
-var darkAll = new L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+var darkAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 });
 controlLayers.addBaseLayer(darkAll, 'CartoDB DarkAll');
 
-var darkNoLabels = new L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
+var darkNoLabels = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 });
 controlLayers.addBaseLayer(darkNoLabels, 'CartoDB Dark no labels');
 
 // Esri satellite map from http://leaflet-extras.github.io/leaflet-providers/preview/
-var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
 controlLayers.addBaseLayer(Esri_WorldImagery, 'Esri World Imagery');
 
 // MapQuest satellite map from http://leaflet-extras.github.io/leaflet-providers/preview/
-var MapQuestOpen_Aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+var MapQuestOpen_Aerial = L.tileLayer('https://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
   type: 'sat',
   ext: 'jpg',
   attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
@@ -74,7 +74,7 @@ controlLayers.addBaseLayer(MapQuestOpen_Aerial, 'MapQuest Open Aerial');
 
 // tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
 // UConn MAGIC WMS settings - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
-var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
+var aerial1934 = new L.tileLayer.wms("https://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
   layers: 'MAGIC:1934 Connecticut Aerial Photography',
   attribution: '1934 <a href="http://magic.library.uconn.edu">MAGIC UConn</a> and <a href="http://cslib.org">CSL</a>'
 }).addTo(map); // adds layer by default
@@ -82,7 +82,7 @@ controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
 // tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
 // UConn MAGIC WMS settings - see http://geoserver.lib.uconn.edu:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.demo.MapPreviewPage
-var hartfordCounty1855 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
+var hartfordCounty1855 = new L.tileLayer.wms("https://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
   layers: 'MAGIC:HartfordCounty_Woodford_1855',
   format: 'image/png',
   version: '1.1.0',
