@@ -1,8 +1,9 @@
 # leaflet-map
 Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLayer.WMS) directly into legend toggle (L.control.layers) with simple jQuery call
 
-## Demo
- - with Leaflet 1.x beta: http://jackdougherty.github.io/leaflet-map/
+## Demos with Leaflet 1.x
+ - via https NPMCDN https://jackdougherty.github.io/leaflet-map/index.html
+ - via https cloudflare https://jackdougherty.github.io/leaflet-map/index-cloudflare.html
 
  ## Why this template?
 
