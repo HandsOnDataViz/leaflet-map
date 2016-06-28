@@ -223,7 +223,7 @@ $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your
         'color': 'red',
         'weight': 2,
         'fillColor': '#fff',
-        'fillOpacity': 0.2
+        'fillOpacity': 0
       }
     },
     onEachFeature: function( feature, layer) {
