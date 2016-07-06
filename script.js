@@ -91,7 +91,7 @@ var starIcon = L.icon({
   iconRetinaUrl: 'src/star-18@2x.png',
   iconSize: [18, 18]
 });
-L.marker([41.764, -72.682], {icon: starIcon}).addTo(map);
+L.marker([41.7646, -72.6823], {icon: starIcon}).addTo(map);
 
 // load point geojson data from local directory, using jQuery function (symbolized by $)
 // modify icon source and styling
