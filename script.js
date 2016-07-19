@@ -80,10 +80,15 @@ var hartfordCounty1855 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:808
 });
 controlLayers.addBaseLayer(hartfordCounty1855, 'Hartford County 1855');
 
-var map1842 = new L.tileLayer.wms("http://maps.nypl.org/warper/maps/wms/7363?", {
+var map1842wms = new L.tileLayer.wms("http://maps.nypl.org/warper/maps/wms/7363?", {
   attribution: '1842 <a href="http://maps.nypl.org/warper/">NYPL Map Warper</a>'
 });
-controlLayers.addBaseLayer(map1842, '1842 map');
+controlLayers.addBaseLayer(map1842wms, '1842 NYPL WMS');
+
+var map1842tile = new L.tileLayer("http://mapwarper.net/maps/tile/14781/{z}/{x}/{y}.png", {
+  attribution: '1842 <a href="http://maps.nypl.org/warper/">NYPL Map Warper</a>'
+});
+controlLayers.addBaseLayer(map1842tile, '1842 NYPL Tile');
 
 /* POINT OVERLAYS */
 // ways to load point map data from different sources: coordinates in the code, GeoJSON in local directory, remote GeoJSON and JSON
