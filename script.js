@@ -23,6 +23,8 @@ var controlLayers = L.control.layers( null, null, {
 // REMOVE AFTER MAP CONSTRUCTION: optional Zoom Label (also in index.html)
 L.control.zoomLabel().addTo(map);
 
+L.control.scale().addTo(map);
+
 // Reposition zoom control other than default topleft
 L.control.zoom({position: "topright"}).addTo(map);
 
