@@ -13,6 +13,14 @@ var map = L.map('map', {
 map.attributionControl
 .setPrefix('View <a href="http://github.com/jackdougherty/leaflet-map">code on GitHub</a>, created with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
 
+// Get your own free Mapzen search API key and see geocoder options at https://github.com/mapzen/leaflet-geocoder
+L.control.geocoder('search-jBPBt5y').addTo(map);
+
+L.control.scale().addTo(map);
+
+// Reposition zoom control other than default topleft
+L.control.zoom({position: "topright"}).addTo(map);
+
 // optional: add legend to toggle any baselayers and/or overlays
 // global variable with (null, null) allows indiv layers to be added inside functions below
 var controlLayers = L.control.layers( null, null, {
@@ -22,11 +30,6 @@ var controlLayers = L.control.layers( null, null, {
 
 // REMOVE AFTER MAP CONSTRUCTION: optional Zoom Label (also in index.html)
 L.control.zoomLabel().addTo(map);
-
-L.control.scale().addTo(map);
-
-// Reposition zoom control other than default topleft
-L.control.zoom({position: "topright"}).addTo(map);
 
 // REMOVE AFTER MAP CONSTRUCTION: optional Coordinate Control (also in index.html)
 var c = new L.Control.Coordinates();
