@@ -33,6 +33,7 @@ See also working example by @iH8 on Plunker: http://plnkr.co/edit/tFVrrq?p=previ
 Using this method, controlLayers is declared as a global variable near the top. When map layers are loaded in subsequent jQuery functions, they can be added directly to the map and/or to the legend toggle control. Overall, this approach seems more straightforward than other tutorials, yet I had not seen it described elsewhere. This template expands on the concept, inserts some sample layers and styling, and includes code comments for novices like me. Feedback and pull requests are welcome.
 
 ## To Do
+- ADD credits and github links for all Leaflet plugins 
 - FIX fluctuating order of overlay layers - related to when they load?
 - TEST if placing overlay code closer to the end of init.js affects display order. For example, will starIcon always be on top if placed near the end? Or loaded after remote layers are loaded?
 - improve polygon fillColor example
