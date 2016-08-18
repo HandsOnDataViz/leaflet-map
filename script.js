@@ -170,7 +170,7 @@ var popupHTML = function(photo){
       result = '<strong>'+photo.title+'</strong><br>';
       result += '<a href="'+photo.url_m+'" target="_blank">';
       result += '<img src="'+photo.url_s+'"></a>';      //was url_t; want url_s; can change to url_m if desired, but frame needs work
-      result += '<small>click image to enlarge in new tab</small>';
+      result += '<br/><small>click image to enlarge in new tab</small>';
       return result;
 }
 // Load photos from flickr JSON feed (insert your flickrURL above), display with clickable blue markers
