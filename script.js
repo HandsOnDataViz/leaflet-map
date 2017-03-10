@@ -44,7 +44,7 @@ map.on('click', function(e) {
 // controlLayers.addBaseLayer (variableName, 'label'); -- adds baselayer and label to legend; omit if only one baselayer with no toggle desired
 var lightAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-});
+}).addTo(map); // adds layer by default
 controlLayers.addBaseLayer(lightAll, 'CartoDB LightAll');
 
 var lightNoLabels = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
@@ -74,7 +74,7 @@ controlLayers.addBaseLayer(Esri_WorldImagery, 'Esri World Imagery');
 var aerial1934 = new L.tileLayer.wms("http://geoserver.lib.uconn.edu:8080/geoserver/MAGIC/wms?", {
   layers: 'MAGIC:1934 Connecticut Aerial Photography',
   attribution: '1934 <a href="http://magic.library.uconn.edu">MAGIC UConn</a> and <a href="http://cslib.org">CSL</a>'
-}).addTo(map); // adds layer by default
+});
 controlLayers.addBaseLayer(aerial1934, 'CT Aerial 1934');
 
 // tileLayer.WMS as a baselayer - see http://leafletjs.com/reference.html#tilelayer-wms
@@ -213,6 +213,37 @@ $.getJSON(flickrURL, function (data) {
 /* POLYGON and POLYLINE OVERLAYS */
 // Ways to load geoJSON polygon layers from local directory or remote server
 // Different options for styling and interactivity
+
+$.getJSON("src/lines.geojson", function (data){
+  var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      return {
+        'color': 'green',
+        'weight': 4,
+      }
+    },
+    onEachFeature: function( feature, layer) {
+      layer.bindPopup(feature.properties.name) // change to match your geojson property labels
+    }
+  });  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Lines');  // insert your 'Title' to add to legend
+});
+
+$.getJSON("src/parks.geojson", function (data){
+  var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      return {
+        'color': 'purple',
+        'weight': 2,
+      }
+    },
+    onEachFeature: function( feature, layer) {
+      layer.bindPopup(feature.properties.PARK_NAME) // change to match your geojson property labels
+    }
+  });  // insert ".addTo(map)" to display layer by default
+  controlLayers.addOverlay(geoJsonLayer, 'Parks');  // insert your 'Title' to add to legend
+});
+
 
 // load GeoJSON polyline data
 $.getJSON("src/bus-routes.geojson", function (data){
