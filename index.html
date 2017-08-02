@@ -4,8 +4,10 @@
     <title>leaflet-map template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <!-- Load Leaflet from a https CDN, not http. Look for updates at http://leafletjs.com/download.html -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <!-- Load Leaflet: instructions at http://leafletjs.com/download.html -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+    integrity="sha384-Zh+y1U8o6/7ni8Mp8szvUfZjGeKKS10CGH3IlD6L1X+XwzYgQ1llOjw/Wslc0cma"
+    crossorigin="anonymous">
     <!-- remove Coord Control and ZoomLabel (and also in script.js) after map contruction -->
     <link rel="stylesheet" href="https://jackdougherty.github.io/Leaflet-Coordinates-Control/Control.Coordinates.css" />
     <link rel="stylesheet" href="https://jackdougherty.github.io/leaflet.zoomlabel/L.Control.ZoomLabel.css" />
@@ -14,15 +16,21 @@
   <body>
     <!-- div to display map; add more for title and caption if desired -->
     <div id="map"></div>
-    <!-- Load Leaflet from a https CDN, not http. Look for updates at http://leafletjs.com/download.html -->
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-    <!-- load jQuery  -->
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-    <!-- load Esri Leaflet -->
-    <script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.7/esri-leaflet.js"></script>
+    <!-- Load Leaflet: instructions at http://leafletjs.com/download.html -->
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+    integrity="sha384-6rCYjRgWDEI2RlZxiVihj1WIZB/uvFiRCGpavTVgFrSPDL0Bk1AiqCW+mmv5h0LP"
+    crossorigin="anonymous"></script>
+    <!-- load jQuery: instructions at https://code.jquery.com/ -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <!-- load Esri Leaflet: instructions at https://esri.github.io/esri-leaflet/download/-->
+    <script src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js"
+    integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w=="
+    crossorigin=""></script>
     <!-- Load leaflet-geocoder to search locations-->
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.8.0/leaflet-geocoder-mapzen.css">
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.8.0/leaflet-geocoder-mapzen.js"></script>
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.9.2/leaflet-geocoder-mapzen.css">
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.9.2/leaflet-geocoder-mapzen.js"></script>
     <!-- remove Coord Control and Zoom Label (and also in script.js) after map contruction -->
     <script type="text/javascript" src="https://jackdougherty.github.io/Leaflet-Coordinates-Control/Control.Coordinates.js"></script>
     <script type="text/javascript" src="https://jackdougherty.github.io/leaflet.zoomlabel/L.Control.ZoomLabel.js"></script>
