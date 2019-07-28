@@ -1,18 +1,18 @@
 # leaflet-map
-Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLayer.WMS) directly into legend toggle (L.control.layers) with simple jQuery call
+Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLayer.WMS) directly into legend toggle (L.control.layers) with simple jQuery calls.
 
 ## Demo with Leaflet 1.x
- - https://jackdougherty.github.io/leaflet-map/index.html
+ - https://datavizforall.github.io/leaflet-map/index.html
 
  ## Why this template?
 
- This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizBook.org.
+This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizForAll.org.
 
  Learn more about Leaflet from these tutorials:
  - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
  - Leaflet Tutorials: http://leafletjs.com/examples.html
 
- This template addresses my greatest challenge as novice coder: how to upload my own spatial data into Leaflet in the popular GeoJSON format, without getting lost in confusing jQuery functions. Leaflet's own intro tutorial skips over this important step. Other excellent tutorials show how to load GeoJSON data from inside a jQuery function, but in a way that does not easily allow you to place those layers in a toggle legend outside of that function. Finally, I discovered a simple, flexible solution posted by [@iH8 on StackOverflow]( http://stackoverflow.com/questions/28534705/how-to-add-two-geojson-feature-collections-in-to-two-layer-groups):
+This template addresses my greatest challenge as novice coder: how to upload my own spatial data into Leaflet in the popular GeoJSON format, without getting lost in confusing jQuery functions. Leaflet's own intro tutorial skips over this important step. Other excellent tutorials show how to load GeoJSON data from inside a jQuery function, but in a way that does not easily allow you to place those layers in a toggle legend outside of that function. Finally, I discovered a simple, flexible solution posted by [@iH8 on StackOverflow]( http://stackoverflow.com/questions/28534705/how-to-add-two-geojson-feature-collections-in-to-two-layer-groups):
  ```
  // Create the layercontrol and add it to the map
 var controlLayers = L.control.layers().addTo(map);
@@ -20,11 +20,11 @@ var controlLayers = L.control.layers().addTo(map);
 // Loading a GeoJSON file (using jQuery's $.getJSON)
 $.getJSON('/my-folder/my-file.json', function (data) {
 
-// Use the data to create a GeoJSON layer and add it to the map
-var geojsonLayer = L.geoJson(data).addTo(map);
+    // Use the data to create a GeoJSON layer and add it to the map
+    var geojsonLayer = L.geoJson(data).addTo(map);
 
-// Add the geojson layer to the layercontrol
-  controlLayers.addOverlay(geojsonLayer, 'My GeoJSON layer title');
+    // Add the geojson layer to the layercontrol
+    controlLayers.addOverlay(geojsonLayer, 'My GeoJSON layer title');
 
 });
 ```
