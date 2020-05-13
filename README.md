@@ -1,12 +1,16 @@
 # leaflet-map
 Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLayer.WMS) directly into legend toggle (L.control.layers) with simple jQuery calls.
 
+<p align="center">
+  <img src="./leaflet-map.csv" alt="Leaflet map demo" />
+</p>
+
 ## Demo with Leaflet 1.x
- - https://datavizforall.github.io/leaflet-map/index.html
+ - https://handsondataviz.github.io/leaflet-map/
 
  ## Why this template?
 
-This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as http://OnTheLine.trincoll.edu and http://DataVizForAll.org.
+This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as https://OnTheLine.trincoll.edu and https://HandsOnDataViz.org.
 
  Learn more about Leaflet from these tutorials:
  - an excellent introduction by Maptime Boston: http://maptimeboston.github.io/leaflet-intro/
