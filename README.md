@@ -6,9 +6,17 @@ Leaflet map template to load local and remote files (GeoJSON, tileLayer, tileLay
 </p>
 
 ## Demo with Leaflet 1.x
- - https://handsondataviz.github.io/leaflet-map/
+- https://handsondataviz.github.io/leaflet-map/
+ 
+## Why are my GeoJSON boundaries not dispalying?
+If you open this repository on your local machine by double-clicking the `index.html` file, you will encounter a CORS (cross-origin request) issue that will prevent local GeoJSON files from loading via the `file:` protocol (see [this issue](https://github.com/HandsOnDataViz/leaflet-map/issues/40) for more details). To avoid this, you can try one of the following:
 
- ## Why this template?
+* Disable safety features in your browser. See [how to run Chrome without web security](https://alfilatov.com/posts/run-chrome-without-cors/), or see [this solution by @flywire](https://github.com/HandsOnDataViz/leaflet-map/issues/40#issuecomment-688219069).
+* Install [`live-server`](https://www.npmjs.com/package/live-server) (or a similar tool) and run this project using a local server.
+* Only load GeoJSON files from remote origins (such as GitHub Pages, GitHub Gists, AWS S3 buckets, Socrata, etc).
+
+
+## Why this template?
 
 This template illustrates simple and flexible methods for non-experts to create maps that require loading GeoJSON files and tileLayers from local directories and remote servers. The template features Connecticut, where I design maps with students and community partners at Trinity College, Hartford CT, and also with collaborators at MAGIC, the Map and Geographic Information Center at UConn Libraries, on projects such as https://OnTheLine.trincoll.edu and https://HandsOnDataViz.org.
 
