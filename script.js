@@ -4,7 +4,7 @@
 // set up the map center and zoom level
 var map = L.map('map', {
   center: [41.76, -72.67], // [41.5, -72.7] for Connecticut; [41.76, -72.67] for Hartford county or city
-  zoom: 13, // zoom 9 for Connecticut; 10 for Hartford county, 12 for Hartford city
+  zoom: 9, // zoom 9 for Connecticut; 10 for Hartford county, 12 for Hartford city
   zoomControl: false, // add later to reposition
   scrollWheelZoom: false
 });
@@ -13,10 +13,12 @@ var map = L.map('map', {
 map.attributionControl
 .setPrefix('View <a href="http://github.com/jackdougherty/leaflet-map">code on GitHub</a>, created with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
 
-// Get your own free Mapzen search API key and see geocoder options at https://github.com/mapzen/leaflet-geocoder
-L.control.geocoder('search-jBPBt5y').addTo(map);
+L.Control.geocoder({position: "topleft"}).addTo(map);
 
 L.control.scale().addTo(map);
+
+// optional Zoom Label for map construction
+L.control.zoomLabel({position: "topright"}).addTo(map);
 
 // Reposition zoom control other than default topleft
 L.control.zoom({position: "topright"}).addTo(map);
@@ -28,39 +30,23 @@ var controlLayers = L.control.layers( null, null, {
   collapsed: false // false = open by default
 }).addTo(map);
 
-// REMOVE AFTER MAP CONSTRUCTION: optional Zoom Label (also in index.html)
-L.control.zoomLabel().addTo(map);
-
-// REMOVE AFTER MAP CONSTRUCTION: optional Coordinate Control (also in index.html)
+// optional Coordinate Control for map construction
 var c = new L.Control.Coordinates();
 c.addTo(map);
 map.on('click', function(e) {
-    c.setCoordinates(e);
+	c.setCoordinates(e);
 });
 
 /* BASELAYERS */
 // use common baselayers below, delete, or add more with plain JavaScript from http://leaflet-extras.github.io/leaflet-providers/preview/
 // .addTo(map); -- suffix displays baselayer by default
 // controlLayers.addBaseLayer (variableName, 'label'); -- adds baselayer and label to legend; omit if only one baselayer with no toggle desired
-var lightAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+var lightAll = new L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
 }).addTo(map); // adds layer by default
 controlLayers.addBaseLayer(lightAll, 'CartoDB LightAll');
-
-var lightNoLabels = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-});
-controlLayers.addBaseLayer(lightNoLabels, 'CartoDB Light no labels');
-
-var darkAll = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-});
-controlLayers.addBaseLayer(darkAll, 'CartoDB DarkAll');
-
-var darkNoLabels = new L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-});
-controlLayers.addBaseLayer(darkNoLabels, 'CartoDB Dark no labels');
 
 // Esri satellite map from http://leaflet-extras.github.io/leaflet-providers/preview/
 // OR use esri-leaflet plugin and esri basemap name https://esri.github.io/esri-leaflet/examples/switching-basemaps.html
@@ -275,7 +261,7 @@ $.getJSON("src/polygons.geojson", function (data) {   // insert pathname to your
     onEachFeature: function( feature, layer) {
       layer.bindPopup(feature.properties.Town) // change 'Town' to match your geojson property labels
     }
-  }).addTo(map);  // insert ".addTo(map)" to display layer by default
+  });  // insert ".addTo(map)" to display layer by default
   controlLayers.addOverlay(geoJsonLayer, 'Polygons (CT towns)');  // insert your 'Title' to add to legend
 });
 
