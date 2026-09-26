@@ -145,8 +145,9 @@ $.getJSON("src/points.geojson", function (data){
 // Example shows photos.search of georeferenced images using keyword tags
 // https://www.flickr.com/services/api/explore/flickr.photos.search
 
-// Define flickrURL endpoint with API explorer: insert your key, and tags= or text= to filter results
-var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=25dcc9a8c7410551dcb0af48c778bde5&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_s%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
+// Define flickrURL endpoint with API explorer: insert your own key below, and tags= or text= to filter results
+// Do NOT commit a real API key here; client-side JS is publicly visible to anyone viewing the page source
+var flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=YOUR_FLICKR_API_KEY&user_id=56513965%40N06&tags=bikemap&extras=geo%2Curl_t%2Curl_s%2Curl_m%2Ctitle&format=json&nojsoncallback=1";
 
 // Define the flickr popup display
 // ** TO DO: Rewrite link to view original source photo directly on Flickr
